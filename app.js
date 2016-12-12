@@ -9,6 +9,7 @@ function Image(id, url, count, viewed){
 }
 Image.prototype.count = 0;
 Image.prototype.viewed = 0;
+Image.prototype.used = false;
 
 // Start of defining functions
 
@@ -37,11 +38,42 @@ function initialArray(){
 }
 
 // Render Function
-
+function reRender(el, content, place, newId){
+  var tempEl = document.createElement('el');
+  tempEl.textContent = content;
+  tempEl.setAttribute('id', newId)
+  var elPlace = document.getElementById(place);
+  elPlace.appendChild(tempEl);
+}
 // Function for handling images
 
 // Function for selecting 3 non duplicate images.
+function threeImageRandomizer(){
+  var array = [];
+  var count = 0;
+  while(count < 3){
+    var temp = randomImage();
 
+    if(!objArray[temp].used){
+      objArray[temp].used = true;
+      console.log(objArray[temp].used);
+      array.push(temp);
+      count +=1;
+    }
+  }
+  for(var i = 0; i < objArray.length; i++){
+    if(array.indexOf(i) < 0){
+      objArray[i].used = false;
+    }
+  }
+  return array;
+}
+
+//function for random number.
+function randomImage(){
+  var output = Math.floor(Math.random() * 20);
+  return output;
+}
 // Function for rendering images.
 
 // Function for rendering table
@@ -49,6 +81,6 @@ function initialArray(){
 
 // Start of Function Calls
 
-if(objArray.legth === 0){
+if(objArray.length === 0){
   initialArray();
 }
