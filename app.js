@@ -2,7 +2,7 @@ var objArray =[];
 var imagePlace = document.getElementById('images');
 var chartPlace = document.getElementById('chart');
 
-function Image(id, url, count, viewed){
+function Image(url, id, count, viewed){
   this.id = id;
   this.url = url;
   objArray.push(this);
@@ -38,12 +38,13 @@ function initialArray(){
 }
 
 // Render Function
-function reRender(el, content, place, newId){
-  var tempEl = document.createElement('el');
+function render(el, content, place, newId, image){
+  var tempEl = document.createElement(el);
   tempEl.textContent = content;
-  tempEl.setAttribute('id', newId)
-  var elPlace = document.getElementById(place);
-  elPlace.appendChild(tempEl);
+  tempEl.setAttribute('id', newId);
+  tempEl.setAttribute('src', image);
+  console.log(place);
+  place.appendChild(tempEl);
 }
 // Function for handling images
 
@@ -53,7 +54,6 @@ function threeImageRandomizer(){
   var count = 0;
   while(count < 3){
     var temp = randomImage();
-
     if(!objArray[temp].used){
       objArray[temp].used = true;
       console.log(objArray[temp].used);
@@ -75,7 +75,13 @@ function randomImage(){
   return output;
 }
 // Function for rendering images.
-
+function renderImages(){
+  imagePlace.innerHTML = '';
+  var arr = threeImageRandomizer();
+  for(var i = 0; i < arr.length; i++){
+    render('img', '', imagePlace, objArray[arr[i]].id, objArray[arr[i]].url)
+  }
+}
 // Function for rendering table
 
 
