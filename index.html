@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Bus-Mall Project</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
   </head>
   <body>
     <h1>Bus-Mall Marketing Survey</h1>
@@ -18,10 +19,13 @@
       <span id="button2">
       <!-- Button goes here. -->
       </span>
+      <span id="button3">
+      <!-- Button goes here. -->
+      </span>
     </section>
     <section>
-      <ul id="chart"><ul>
-      <!-- chart printing or list for day 1 goes here. -->
+      <ul id="list"></ul>
+      <canvas id="votes" width="600" height="200"></canvas>
     </section>
     <script src="app.js"></script>
   </body>
