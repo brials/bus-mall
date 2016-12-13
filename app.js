@@ -19,6 +19,7 @@ Image.prototype.used = false;
 var chartDrawn = false;
 var voteCounts = [];
 var voteLabels = [];
+var chartPlace = document.getElementById('chart');
 
 // Start of defining functions
 
@@ -110,7 +111,7 @@ function handleImageClick(event){
   renderImages();
   globalCount += 1;
   populateVote();
-  if(globalCount === 25){
+  if(globalCount === 5){
     imagePlace.innerHTML = '';
     render('button', 'Survey Done, Please Click Here', buttonPlace);
     render('button', 'Retake Survey?', buttonPlace2);
@@ -121,6 +122,7 @@ function handleImageClick(event){
 function handleButtonClick(event){
   event.preventDefault();
   listPlace.innerHTML = '';
+  hideChart();
   for(var i =0; i < objArray.length; i++){
     var temp = objArray[i].id + ' has been chosen ' + objArray[i].count + ' times, and viewed ' + objArray[i].viewed + ' times.';
     render('li', temp, listPlace);
@@ -132,12 +134,16 @@ function handleButtonClick2(event){
   listPlace.innerHTML = '';
   buttonPlace.innerHTML = '';
   buttonPlace2.innerHTML = '';
+  buttonPlace3.innerHTML = '';
+  hideChart();
   renderImages();
   globalCount = 0;
 }
 
 // Populate Vote data
 function populateVote(){
+  voteLabels = [];
+  voteCounts = [];
   for(var i = 0; i < objArray.length; i++){
     voteLabels.push(objArray[i].id)
     voteCounts.push(objArray[i].count);
@@ -146,31 +152,44 @@ function populateVote(){
 
 // draw chart
 function drawChart(){
-  var votes = document.getElementById('votes').getContext('2d');
-  var imageChart = new Chart(votes, {
-    type: 'bar',
-    data: {
-      labels: voteLabels,
-      datasets: [{
-        label: '# of Votes',
-        data: voteCounts,
-        backgroundColor:'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255,99,132,1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: false,
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          }
+  if(!chartDrawn){
+    listPlace.innerHTML = '';
+    var canEl = document.createElement('canvas');
+    canEl.setAttribute('id', 'votes');
+    canEl.setAttribute('width', 600);
+    canEl.setAttribute('height', 200);
+    chartPlace.appendChild(canEl);
+    var votes = document.getElementById('votes').getContext('2d');
+    var imageChart = new Chart(votes, {
+      type: 'bar',
+      data: {
+        labels: voteLabels,
+        datasets: [{
+          label: '# of Votes',
+          data: voteCounts,
+          backgroundColor:'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255,99,132,1)',
+          borderWidth: 1
         }]
+      },
+      options: {
+        responsive: false,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
+        }
       }
-    }
-  });
-  chartDrawn = true;
+    });
+    chartDrawn = true;
+  }
+}
+
+function hideChart(){
+  chartPlace.innerHTML='';
+  chartDrawn = false;
 }
 
 // Start of Function Calls
