@@ -57,23 +57,6 @@ function lookInArray(id){
     }
   }
 }
-// Function for handling image clicks
-function handleImageClick(event){
-  event.preventDefault();
-  var name = event.target.id;
-  if(name === 'images'){
-    return alert('Please click an image');
-  }
-  var index = lookInArray(name);
-  objArray[index].count += 1;
-  renderImages();
-  globalCount += 1;
-  if(globalCount === 25){ 
-    imagePlace.innerHTML = '';
-    render('button', 'Survey Done, Please Click Here', buttonPlace);
-    render('button', 'Retake Survey?', buttonPlace2);
-  }
-}
 
 // Function for selecting 3 non duplicate images.
 function threeImageRandomizer(){
@@ -107,6 +90,23 @@ function renderImages(){
   var arr = threeImageRandomizer();
   for(var i = 0; i < arr.length; i++){
     render('img', '', imagePlace, objArray[arr[i]].id, objArray[arr[i]].url)
+  }
+}
+// Function for handling image clicks
+function handleImageClick(event){
+  event.preventDefault();
+  var name = event.target.id;
+  if(name === 'images'){
+    return alert('Please click an image');
+  }
+  var index = lookInArray(name);
+  objArray[index].count += 1;
+  renderImages();
+  globalCount += 1;
+  if(globalCount === 25){
+    imagePlace.innerHTML = '';
+    render('button', 'Survey Done, Please Click Here', buttonPlace);
+    render('button', 'Retake Survey?', buttonPlace2);
   }
 }
 // Function for rendering list on button click;
