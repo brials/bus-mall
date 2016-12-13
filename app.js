@@ -2,9 +2,10 @@ var objArray =[];
 var imagePlace = document.getElementById('images');
 var chartPlace = document.getElementById('chart');
 var buttonPlace = document.getElementById('button');
+var buttonPlace2 = document.getElementById('button2');
 var globalCount = 0;
 
-function Image(url, id, count, viewed){
+function Image(url, id){
   this.id = id;
   this.url = url;
   objArray.push(this);
@@ -45,7 +46,6 @@ function render(el, content, place, newId, image){
   tempEl.textContent = content;
   tempEl.setAttribute('id', newId);
   tempEl.setAttribute('src', image);
-  console.log(place);
   place.appendChild(tempEl);
 }
 
@@ -60,19 +60,18 @@ function lookInArray(id){
 // Function for handling image clicks
 function handleImageClick(event){
   event.preventDefault();
-  console.log(event.target.id);
   var name = event.target.id;
   if(name === 'images'){
     return alert('Please click an image');
   }
   var index = lookInArray(name);
-  console.log(index);
   objArray[index].count += 1;
   renderImages();
   globalCount += 1;
-  if(globalCount === 5){
+  if(globalCount === 25){ 
     imagePlace.innerHTML = '';
-    render('button', 'Survey Done, Please Click Here', buttonPlace)
+    render('button', 'Survey Done, Please Click Here', buttonPlace);
+    render('button', 'Retake Survey?', buttonPlace2);
   }
 }
 
@@ -119,6 +118,15 @@ function handleButtonClick(event){
     render('li', temp, chartPlace);
   }
 }
+//Function for retaking survey.
+function handleButtonClick2(event){
+  event.preventDefault();
+  chartPlace.innerHTML = '';
+  buttonPlace.innerHTML = '';
+  buttonPlace2.innerHTML = '';
+  renderImages();
+  globalCount = 0;
+}
 
 
 // Start of Function Calls
@@ -129,3 +137,4 @@ if(objArray.length === 0){
 renderImages();
 imagePlace.addEventListener('click', handleImageClick);
 buttonPlace.addEventListener('click', handleButtonClick);
+buttonPlace2.addEventListener('click', handleButtonClick2);
