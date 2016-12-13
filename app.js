@@ -72,7 +72,7 @@ function handleImageClick(event){
   globalCount += 1;
   if(globalCount === 5){
     imagePlace.innerHTML = '';
-    render('button', 'Click Here', 'button')
+    render('button', 'Survey Done, Please Click Here', buttonPlace)
   }
 }
 
@@ -110,7 +110,15 @@ function renderImages(){
     render('img', '', imagePlace, objArray[arr[i]].id, objArray[arr[i]].url)
   }
 }
-// Function for rendering table
+// Function for rendering list on button click;
+function handleButtonClick(event){
+  event.preventDefault();
+  chartPlace.innerHTML = '';
+  for(var i =0; i < objArray.length; i++){
+    var temp = objArray[i].id + ' has been chosen ' + objArray[i].count + ' times, and viewed ' + objArray[i].viewed + ' times.';
+    render('li', temp, chartPlace);
+  }
+}
 
 
 // Start of Function Calls
