@@ -18,6 +18,7 @@ Image.prototype.used = false;
 // Define things for the list;
 var chartDrawn = false;
 var voteCounts = [];
+var voteViews = [];
 var voteLabels = [];
 var chartPlace = document.getElementById('chart');
 
@@ -144,9 +145,11 @@ function handleButtonClick2(event){
 function populateVote(){
   voteLabels = [];
   voteCounts = [];
+  voteViews = [];
   for(var i = 0; i < objArray.length; i++){
     voteLabels.push(objArray[i].id)
     voteCounts.push(objArray[i].count);
+    voteViews.push(objArray[i].viewed);
   }
 }
 
@@ -170,8 +173,15 @@ function drawChart(){
           backgroundColor:'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255,99,132,1)',
           borderWidth: 1
+        },{
+          label: '# of Views',
+          data: voteViews,
+          backgroundColor:'rgba(0, 99, 132, 0.2)',
+          borderColor: 'rgba(0,99,132,1)',
+          borderWidth: 1
         }]
       },
+
       options: {
         responsive: false,
         scales: {
