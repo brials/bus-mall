@@ -9,11 +9,11 @@ var globalCount = 0;
 function Image(url, id){
   this.id = id;
   this.url = url;
+  this.count = 0;
+  this.viewed = 0;
+  this.used = false;
   objArray.push(this);
 }
-Image.prototype.count = 0;
-Image.prototype.viewed = 0;
-Image.prototype.used = false;
 
 // Define things for the list;
 var chartDrawn = false;
@@ -111,8 +111,9 @@ function handleImageClick(event){
   objArray[index].count += 1;
   renderImages();
   globalCount += 1;
-  populateVote();
   if(globalCount === 5){
+    localStorage.setItem('objArray', JSON.stringify(objArray));
+    populateVote();
     imagePlace.innerHTML = '';
     render('button', 'Survey Done, Please Click Here', buttonPlace);
     render('button', 'Retake Survey?', buttonPlace2);
@@ -156,6 +157,8 @@ function populateVote(){
 // draw chart
 function drawChart(){
   if(!chartDrawn){
+    console.table(JSON.parse(localStorage.objArray));
+    console.log(objArray, 'here');
     listPlace.innerHTML = '';
     var canEl = document.createElement('canvas');
     canEl.setAttribute('id', 'votes');
@@ -204,7 +207,9 @@ function hideChart(){
 
 // Start of Function Calls
 
-if(objArray.length === 0){
+if(localStorage.objArray){
+  objArray = JSON.parse(localStorage.objArray);
+} else {
   initialArray();
 }
 renderImages();
