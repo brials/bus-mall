@@ -1,8 +1,9 @@
 var objArray =[];
 var imagePlace = document.getElementById('images');
-var chartPlace = document.getElementById('chart');
+var listPlace = document.getElementById('list');
 var buttonPlace = document.getElementById('button');
 var buttonPlace2 = document.getElementById('button2');
+var buttonPlace3 = document.getElementById('button3');
 var globalCount = 0;
 
 function Image(url, id){
@@ -13,6 +14,12 @@ function Image(url, id){
 Image.prototype.count = 0;
 Image.prototype.viewed = 0;
 Image.prototype.used = false;
+
+// Define things for the list;
+var chartDrawn = false;
+var voteCounts = [];
+var voteLabels = [];
+var chartPlace = document.getElementById('chart');
 
 // Start of defining functions
 
@@ -57,23 +64,6 @@ function lookInArray(id){
     }
   }
 }
-// Function for handling image clicks
-function handleImageClick(event){
-  event.preventDefault();
-  var name = event.target.id;
-  if(name === 'images'){
-    return alert('Please click an image');
-  }
-  var index = lookInArray(name);
-  objArray[index].count += 1;
-  renderImages();
-  globalCount += 1;
-  if(globalCount === 25){ 
-    imagePlace.innerHTML = '';
-    render('button', 'Survey Done, Please Click Here', buttonPlace);
-    render('button', 'Retake Survey?', buttonPlace2);
-  }
-}
 
 // Function for selecting 3 non duplicate images.
 function threeImageRandomizer(){
@@ -109,25 +99,98 @@ function renderImages(){
     render('img', '', imagePlace, objArray[arr[i]].id, objArray[arr[i]].url)
   }
 }
+// Function for handling image clicks
+function handleImageClick(event){
+  event.preventDefault();
+  var name = event.target.id;
+  if(name === 'images'){
+    return alert('Please click an image');
+  }
+  var index = lookInArray(name);
+  objArray[index].count += 1;
+  renderImages();
+  globalCount += 1;
+  populateVote();
+  if(globalCount === 5){
+    imagePlace.innerHTML = '';
+    render('button', 'Survey Done, Please Click Here', buttonPlace);
+    render('button', 'Retake Survey?', buttonPlace2);
+    render('button', 'Draw a Chart?', buttonPlace3);
+  }
+}
 // Function for rendering list on button click;
 function handleButtonClick(event){
   event.preventDefault();
-  chartPlace.innerHTML = '';
+  listPlace.innerHTML = '';
+  hideChart();
   for(var i =0; i < objArray.length; i++){
     var temp = objArray[i].id + ' has been chosen ' + objArray[i].count + ' times, and viewed ' + objArray[i].viewed + ' times.';
-    render('li', temp, chartPlace);
+    render('li', temp, listPlace);
   }
 }
 //Function for retaking survey.
 function handleButtonClick2(event){
   event.preventDefault();
-  chartPlace.innerHTML = '';
+  listPlace.innerHTML = '';
   buttonPlace.innerHTML = '';
   buttonPlace2.innerHTML = '';
+  buttonPlace3.innerHTML = '';
+  hideChart();
   renderImages();
   globalCount = 0;
 }
 
+// Populate Vote data
+function populateVote(){
+  voteLabels = [];
+  voteCounts = [];
+  for(var i = 0; i < objArray.length; i++){
+    voteLabels.push(objArray[i].id)
+    voteCounts.push(objArray[i].count);
+  }
+}
+
+// draw chart
+function drawChart(){
+  if(!chartDrawn){
+    listPlace.innerHTML = '';
+    var canEl = document.createElement('canvas');
+    canEl.setAttribute('id', 'votes');
+    canEl.setAttribute('width', 600);
+    canEl.setAttribute('height', 200);
+    chartPlace.appendChild(canEl);
+    var votes = document.getElementById('votes').getContext('2d');
+    var imageChart = new Chart(votes, {
+      type: 'bar',
+      data: {
+        labels: voteLabels,
+        datasets: [{
+          label: '# of Votes',
+          data: voteCounts,
+          backgroundColor:'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255,99,132,1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
+        }
+      }
+    });
+    chartDrawn = true;
+  }
+}
+
+function hideChart(){
+  chartPlace.innerHTML='';
+  chartDrawn = false;
+}
 
 // Start of Function Calls
 
@@ -138,3 +201,4 @@ renderImages();
 imagePlace.addEventListener('click', handleImageClick);
 buttonPlace.addEventListener('click', handleButtonClick);
 buttonPlace2.addEventListener('click', handleButtonClick2);
+buttonPlace3.addEventListener('click', drawChart)
