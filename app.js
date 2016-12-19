@@ -111,7 +111,7 @@ function handleImageClick(event){
   objArray[index].count += 1;
   renderImages();
   globalCount += 1;
-  if(globalCount === 5){
+  if(globalCount === 25){
     localStorage.setItem('objArray', JSON.stringify(objArray));
     populateVote();
     imagePlace.innerHTML = '';
